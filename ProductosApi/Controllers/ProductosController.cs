@@ -25,6 +25,20 @@ namespace ProductosApi.Controllers
             return productos;
         }
 
+        // GET api/productos/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var sql = "SELECT Id, Nombre, Precio FROM Productos WHERE Id = @Id";
+            var producto = await _connection.QueryFirstOrDefaultAsync<Producto>(sql, new { Id = id });
+
+            if (producto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(producto);
+        }
         // POST api/productos
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Producto producto)
